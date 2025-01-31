@@ -1,0 +1,13 @@
+numpy 
+pandas 
+nltk
+scikit-learn
+seaborn
+matplotlib
+db-sqlite3
+fastapi  
+requests
+uvicorn
+python-multipart
+streamlit
+plotly
