@@ -138,10 +138,3 @@ See `requirements.txt` for complete list.
    - Confidence thresholds
    - Enhanced visualizations
 
-3. Performance:
-   - Model optimization
-   - Response caching
-   - Load balancing
-
-## License
-[Specify your license here]
