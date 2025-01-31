@@ -1,11 +1,12 @@
 # IMDB Movie Review Sentiment Analysis
 
-This project implements a sentiment analysis model for movie reviews using the IMDB dataset. It includes data preprocessing, model training, and a FastAPI service for making predictions.
+This project implements a sentiment analysis model for movie reviews using the IMDB dataset, featuring a FastAPI backend and Streamlit frontend.
 
 ## Project Structure
 ```
 .
 ├── app.py              # FastAPI application
+├── streamlit_app.py    # Streamlit frontend
 ├── model.pkl           # Trained model and vectorizer
 ├── requirements.txt    # Project dependencies
 ├── test_api.py        # API testing script
@@ -21,13 +22,13 @@ This project implements a sentiment analysis model for movie reviews using the I
 
 ### Installation
 
-1. Clone the repository (or download the project files):
+1. Clone the repository:
 ```bash
 git clone <repository-url>
 cd sentiment-analysis
 ```
 
-2. Create and activate a virtual environment (recommended):
+2. Create and activate a virtual environment:
 ```bash
 python -m venv venv
 source venv/bin/activate  # On Windows: venv\Scripts\activate
@@ -38,94 +39,49 @@ source venv/bin/activate  # On Windows: venv\Scripts\activate
 pip install -r requirements.txt
 ```
 
-## Data Acquisition
+## Running the Application
 
-The IMDB dataset used in this project contains 50,000 movie reviews labeled as positive or negative. The dataset was loaded using the following steps:
-
-1. Initial data loading and preprocessing
-2. Text cleaning (HTML tags removal, lowercase conversion)
-3. Special character removal
-4. Stopword removal
-5. Porter Stemming
-
-## Model Training
-
-### Training Process
-1. Text vectorization using CountVectorizer (max_features=1400)
-2. Model: MultinomialNB (Multinomial Naive Bayes)
-3. Train-test split: 80-20
-
-### Model Performance
-- Accuracy on test set: ~87%
-- Key metrics:
-  - Precision (Positive): 0.88
-  - Recall (Positive): 0.86
-  - F1-Score: 0.87
-
-## Running the API
-
-1. Start the FastAPI server:
+1. Start the FastAPI backend:
 ```bash
 uvicorn app:app --reload --host 0.0.0.0 --port 8000
 ```
 
-2. Access the API documentation:
-- Swagger UI: http://localhost:8000/docs
+2. Launch the Streamlit frontend:
+```bash
+streamlit run streamlit_app.py
+```
+
+Access the applications at:
+- Frontend: http://localhost:8501
+- API Documentation: http://localhost:8000/docs
 - ReDoc: http://localhost:8000/redoc
 
-### Testing the API
+## Components
 
-#### Using Python requests:
-```python
-import requests
+### Frontend (Streamlit)
+Features:
+- Interactive web interface
+- Real-time sentiment analysis
+- Confidence score visualization
+- Text preprocessing display
+- API health monitoring
 
-url = "http://localhost:8000/predict"
-data = {
-    "review": "This movie was fantastic! The acting was great."
-}
-response = requests.post(url, json=data)
-print(response.json())
-```
+### Backend (FastAPI)
+Endpoints:
+- POST /predict: Sentiment prediction
+- GET /health: System health check
 
-#### Using curl:
-```bash
-curl -X POST "http://localhost:8000/predict" \
-     -H "Content-Type: application/json" \
-     -d '{"review": "This movie was fantastic!"}'
-```
-
-#### Health Check:
-```bash
-curl http://localhost:8000/health
-```
-
-## API Endpoints
-
-### POST /predict
-Makes a sentiment prediction for a given movie review.
-
-Request body:
+Response formats:
 ```json
-{
-    "review": "string"
-}
-```
-
-Response:
-```json
+# POST /predict
 {
     "original_text": "string",
     "processed_text": "string",
     "sentiment_prediction": "string",
     "confidence": "float"
 }
-```
 
-### GET /health
-Checks the health status of the API and model.
-
-Response:
-```json
+# GET /health
 {
     "status": true,
     "model_loaded": true,
@@ -133,22 +89,9 @@ Response:
 }
 ```
 
-## Dependencies
-
-- fastapi
-- uvicorn
-- scikit-learn
-- nltk
-- pandas
-- numpy
-- requests (for testing)
-
-For a complete list of dependencies with versions, see `requirements.txt`.
-
 ## Model Details
 
-The sentiment analysis model uses the following approach:
-
+### Data Processing
 1. Text Preprocessing:
    - HTML tag removal
    - Lowercase conversion
@@ -157,39 +100,43 @@ The sentiment analysis model uses the following approach:
    - Porter Stemming
 
 2. Feature Engineering:
-   - CountVectorizer with max_features=1400
-   - Vocabulary size: 1400 most frequent terms
+   - CountVectorizer (max_features=1400)
 
-3. Model Architecture:
-   - Algorithm: MultinomialNB
-   - Training data size: 40,000 reviews
-   - Test data size: 10,000 reviews
+### Model Architecture
+- Algorithm: MultinomialNB
+- Training/Test split: 80/20
+- Accuracy: ~87%
+- Metrics:
+  - Precision: 0.88
+  - Recall: 0.86
+  - F1-Score: 0.87
 
-4. Performance Metrics:
-   - Accuracy: ~87%
-   - Confusion Matrix:
-     ```
-     [[4321  679]
-      [ 621 4379]]
-     ```
-   - Classification Report:
-     ```
-     precision    recall  f1-score
-     negative     0.87    0.86    0.87
-     positive     0.87    0.88    0.87
-     ```
+## Dependencies
+
+Key packages:
+- fastapi
+- streamlit
+- uvicorn
+- scikit-learn
+- nltk
+- pandas
+- numpy
+- plotly
+- requests
+
+See `requirements.txt` for complete list.
 
 ## Future Improvements
 
 1. Model Enhancements:
-   - Try different vectorization techniques (TF-IDF)
-   - Experiment with deep learning models
-   - Implement cross-validation
+   - TF-IDF vectorization
+   - Deep learning models
+   - Cross-validation
 
-2. API Features:
-   - Batch prediction endpoint
-   - Confidence threshold parameter
-   - Detailed sentiment analysis
+2. Features:
+   - Batch predictions
+   - Confidence thresholds
+   - Enhanced visualizations
 
 3. Performance:
    - Model optimization
